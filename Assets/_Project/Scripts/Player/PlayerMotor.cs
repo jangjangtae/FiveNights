@@ -8,7 +8,7 @@ namespace FiveNights.Player
     /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(PlayerInputReader))]
-    public class PlayerMotor : MonoBehaviour
+    public class PlayerMotor : MonoBehaviour, FiveNights.Perception.INoiseEmitter
     {
         [SerializeField] private PlayerMovementSettings _settings;
 
@@ -22,6 +22,20 @@ namespace FiveNights.Player
         public Vector2 Velocity => _body != null ? _body.linearVelocity : Vector2.zero;
         public Vector2 Facing { get; private set; } = Vector2.right;
         public PlayerMovementSettings Settings => _settings;
+
+        // INoiseEmitter
+        public Vector2 NoisePosition => transform.position;
+        public float NoiseRadius => CurrentNoiseRadius;
+
+        /// <summary>잡혔을 때 등에 쓴다: 위치를 옮기고 속도·웅크리기를 초기화한다.</summary>
+        public void Teleport(Vector2 position)
+        {
+            _body.position = position;
+            transform.position = position;
+            _body.linearVelocity = Vector2.zero;
+            _crouchToggled = false;
+            CurrentMode = MovementMode.Idle;
+        }
 
         private bool WantsCrouch => _settings != null && _settings.crouchIsToggle ? _crouchToggled : _input.CrouchHeld;
 
