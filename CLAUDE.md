@@ -33,7 +33,7 @@
 | 입력 | Input System (`Assets/Settings/InputSystem_Actions.inputactions`). 구 `Input.GetKey` 사용 금지 |
 | 빌드 타깃 | WebGL (주), Windows IL2CPP (로컬 테스트용) |
 | 버전 관리 | GitHub `jangjangtae/FiveNights` + Git LFS, 브랜치 `main` |
-| 개발 기기 | 노트북 + 집 데스크탑 (GitHub로 동기화) |
+| 개발 기기 | 노트북 + 집 데스크탑 (GitHub로 동기화). 기기별 경로는 아래 표 |
 
 - `com.unity.pipeline` 패키지는 Unity CLI가 에디터를 제어하는 데 쓰므로 **지우지 말 것**. 게임 코드에서는 참조하지 않는다.
 - 새 패키지 추가나 프로젝트 설정의 큰 변경은 사용자에게 먼저 물어본다.
@@ -88,8 +88,14 @@ docs/                       # 기획서, 설계 메모
 
 ## Claude 작업 방식 (Unity 에디터)
 
-- Unity CLI: `%LOCALAPPDATA%\Microsoft\WindowsApps\unity.exe`
-  - 에디터 명령마다 `--project-path "C:\Users\jang\Documents\FiveNights"`를 붙인다.
+- 기기별 경로 (사용자 폴더 이름이 기기마다 다르다):
+
+  | 기기 | 프로젝트 경로 (`--project-path`) | Unity CLI |
+  |---|---|---|
+  | 노트북 | `C:\Users\jang\Documents\FiveNights` | `%LOCALAPPDATA%\Microsoft\WindowsApps\unity.exe` |
+  | 집 데스크탑 | `C:\Users\wkdal\Documents\FiveNights` | `%LOCALAPPDATA%\Unity\bin\unity.exe` |
+
+  - 에디터 명령마다 지금 기기의 `--project-path`를 붙인다. 어느 기기인지 모르면 `echo %USERPROFILE%`로 확인한다.
   - 작업 전에 `unity status`로 에디터가 `ready`인지 확인한다. 연결이 안 되면 사용자에게 에디터를 열어 달라고 한다.
 - **씬과 프리팹은 에디터 명령으로 수정한다** (`unity command` 의 gameobject, component, scene, prefab, script eval 등). 에디터가 열려 있을 때 `.unity` / `.prefab` / `.asset` YAML을 직접 편집하지 않는다.
 - 스크립트를 고친 뒤에는 컴파일 완료를 기다리고 콘솔을 확인한다 (`unity command console status`, `console get`). **에러 0개** 상태로 넘긴다.
